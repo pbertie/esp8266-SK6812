@@ -1,0 +1,23 @@
+//
+// Created by paul on 07/12/2020.
+//
+
+#ifndef ESPSTRIP_CONFIG_H
+#define ESPSTRIP_CONFIG_H
+
+#define SSID_1 "SSID1"
+#define SSID_2 "SSID2"
+#define WIFI_PASS_1 "pass1"
+#define WIFI_PASS_2 "pass2"
+
+#define LED_STRIP_PIN 5
+#define LED_R 15
+#define LED_G 12
+#define LED_B 13
+#define LED_COUNT 300
+#define BTN_START 4
+#define BTN_PAUSE 0
+#define BTN_STOP 14
+#define STRIP_POWER 16
+
+#endif //ESPSTRIP_CONFIG_H
