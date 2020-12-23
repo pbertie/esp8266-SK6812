@@ -5,6 +5,8 @@
 #ifndef ESPSTRIP_CONFIG_H
 #define ESPSTRIP_CONFIG_H
 
+#define SSID_AP "ESP_AP"
+#define WIFI_PASS_AP "password"
 #define SSID_1 "SSID1"
 #define SSID_2 "SSID2"
 #define WIFI_PASS_1 "pass1"
@@ -15,9 +17,9 @@
 #define LED_G 12
 #define LED_B 13
 #define LED_COUNT 300
-#define BTN_START 4
-#define BTN_PAUSE 0
-#define BTN_STOP 14
+#define BTN_1 4
+#define BTN_2 0
+#define BTN_3 14
 #define STRIP_POWER 16
 
 #endif //ESPSTRIP_CONFIG_H

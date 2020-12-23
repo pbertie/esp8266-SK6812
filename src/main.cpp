@@ -24,11 +24,17 @@ void pauseBtn();
 
 void stopBtn();
 
+void addBtn();
+
+void removeBtn();
+
 void initStrip();
 
 void stripOff();
 
 void stripOn();
+
+void showBtn();
 
 void initGPIO();
 
@@ -53,22 +59,27 @@ void initGPIO() {
     digitalWrite(LED_B, LOW); // OFF
     digitalWrite(LED_BUILTIN, HIGH); // OFF
 
-    pinMode(BTN_START, INPUT_PULLUP);
-    pinMode(BTN_PAUSE, INPUT_PULLUP);
-    pinMode(BTN_STOP, INPUT_PULLUP);
+    pinMode(BTN_1, INPUT_PULLUP);
+    pinMode(BTN_2, INPUT_PULLUP);
+    pinMode(BTN_3, INPUT_PULLUP);
     pinMode(STRIP_POWER, INPUT_PULLDOWN_16);
 
-    Zinc::addButtonEvent(BTN_START, startBtn, TRIGGER_LOW);
-    Zinc::addButtonEvent(BTN_PAUSE, pauseBtn, TRIGGER_LOW);
-    Zinc::addButtonEvent(BTN_STOP, stopBtn, TRIGGER_LOW);
+    Zinc::addButtonEvent(BTN_1, showBtn, TRIGGER_LOW);
+    Zinc::addButtonEvent(BTN_2, addBtn, TRIGGER_LOW);
+    Zinc::addButtonEvent(BTN_3, removeBtn, TRIGGER_LOW);
+
     Zinc::addButtonEvent(STRIP_POWER, stripOff, TRIGGER_LOW);
     Zinc::addButtonEvent(STRIP_POWER, stripOn, TRIGGER_HIGH);
+
+    Zinc::addButtonEvent(BTN_1, startBtn, THROTTLE_LOW, 500);
+    Zinc::addButtonEvent(BTN_2, pauseBtn, THROTTLE_LOW, 500);
+    Zinc::addButtonEvent(BTN_3, stopBtn, THROTTLE_LOW, 500);
 }
 
 void initStrip() {
     strip.begin();
     strip.setBrightness(255);
-//    These power readings include controller + strip
+//    These power readings include controller + 5m strip
 //                                                      Power 1 End    Power Both Ends
 //    strip.fill(Adafruit_NeoPixel::Color(0,0,0,0));        // 0.3A   0.3A
     strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 60));       // 1.5A   1.5A
@@ -84,24 +95,32 @@ void initStrip() {
 }
 
 uint16_t animId = 0;
+uint8_t colorCount = 10;
+uint8_t whiteCount = 5;
 
 void stripOff() {
     // Flash builtin LED slow to show it detected the LED Strip power going off...
-    flashBuiltIn(1000, 20);
+    flashBuiltIn(1000, 10);
 }
 
 void stripOn() {
     // Flash builtin LED fast to show it detected the LED Strip power coming back on...
-    flashBuiltIn(1000, 50);
+    flashBuiltIn(1000, 30);
     // The strip has only just got power back so we need to tell it what to display again
-    // Here we are delaying that by 100ms as if we do it too quick it doesn't draw properly...
-    Zinc::addAnimateEvent([](uint16_t id, uint16_t frame) -> void { strip.show(); }, 10, 1, 100);
+    // Here we are delaying that and repeating as if we do it too quick it doesn't draw properly...
+    Zinc::addAnimateEvent([](uint16_t id, uint16_t frame) -> void { strip.show(); }, 50, 10);
+}
+
+void showBtn() {
+    flashG(1000, 10);
+    strip.show();
 }
 
 void startBtn() {
     flashG(1000, 10);
     if (animId == 0) {
-        animId = Animations::runningSpots(strip, 12, 12, true, 50);
+        strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
+        animId = Animations::runningSpots(strip, colorCount, whiteCount, true, 50);
     } else {
         Animations::resume(animId);
     }
@@ -120,6 +139,30 @@ void stopBtn() {
         Animations::remove(animId);
         animId = 0;
     }
+}
+
+void addBtn() {
+    if (whiteCount == 255) {
+        return;
+    }
+    flashB(1000, 10);
+    if (animId != 0) {
+        Animations::remove(animId);
+    }
+    strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
+    animId = Animations::runningSpots(strip, ++colorCount, whiteCount, true, 50);
+}
+
+void removeBtn() {
+    if (whiteCount == 0) {
+        return;
+    }
+    flashR(1000, 10);
+    if (animId != 0) {
+        Animations::remove(animId);
+    }
+    strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
+    animId = Animations::runningSpots(strip, --colorCount, whiteCount, true, 50);
 }
 
 void loop() {
