@@ -28,6 +28,10 @@ void addBtn();
 
 void removeBtn();
 
+void speedUp();
+
+void speedDown();
+
 void initStrip();
 
 void stripOff();
@@ -35,6 +39,8 @@ void stripOff();
 void stripOn();
 
 void showBtn();
+
+void resetAnimation();
 
 void initGPIO();
 
@@ -65,8 +71,11 @@ void initGPIO() {
     pinMode(STRIP_POWER, INPUT_PULLDOWN_16);
 
     Zinc::addButtonEvent(BTN_1, showBtn, TRIGGER_LOW);
-    Zinc::addButtonEvent(BTN_2, addBtn, TRIGGER_LOW);
-    Zinc::addButtonEvent(BTN_3, removeBtn, TRIGGER_LOW);
+//    Zinc::addButtonEvent(BTN_2, addBtn, TRIGGER_LOW);
+//    Zinc::addButtonEvent(BTN_3, removeBtn, TRIGGER_LOW);
+
+    Zinc::addButtonEvent(BTN_2, speedUp, TRIGGER_LOW);
+    Zinc::addButtonEvent(BTN_3, speedDown, TRIGGER_LOW);
 
     Zinc::addButtonEvent(STRIP_POWER, stripOff, TRIGGER_LOW);
     Zinc::addButtonEvent(STRIP_POWER, stripOn, TRIGGER_HIGH);
@@ -95,8 +104,9 @@ void initStrip() {
 }
 
 uint16_t animId = 0;
-uint8_t colorCount = 10;
-uint8_t whiteCount = 5;
+uint8_t colorCount = START_COLOR_COUNT;
+uint8_t whiteCount = START_WHITE_COUNT;
+uint32_t gap = START_SPEED;
 
 void stripOff() {
     // Flash builtin LED slow to show it detected the LED Strip power going off...
@@ -119,8 +129,7 @@ void showBtn() {
 void startBtn() {
     flashG(1000, 10);
     if (animId == 0) {
-        strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
-        animId = Animations::runningSpots(strip, colorCount, whiteCount, true, 50);
+        resetAnimation();
     } else {
         Animations::resume(animId);
     }
@@ -149,8 +158,8 @@ void addBtn() {
     if (animId != 0) {
         Animations::remove(animId);
     }
-    strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
-    animId = Animations::runningSpots(strip, ++colorCount, whiteCount, true, 50);
+    colorCount++;
+    resetAnimation();
 }
 
 void removeBtn() {
@@ -158,11 +167,32 @@ void removeBtn() {
         return;
     }
     flashR(1000, 10);
+    colorCount--;
+    resetAnimation();
+}
+
+void speedUp() {
+    if (gap <= 5) {
+        return;
+    }
+    gap-=5;
+    resetAnimation();
+}
+
+void speedDown() {
+    if (gap >= 1000) {
+        return;
+    }
+    gap+=5;
+    resetAnimation();
+}
+
+void resetAnimation() {
     if (animId != 0) {
         Animations::remove(animId);
     }
     strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
-    animId = Animations::runningSpots(strip, --colorCount, whiteCount, true, 50);
+    animId = Animations::runningSpots(strip, colorCount, whiteCount, true, gap);
 }
 
 void loop() {

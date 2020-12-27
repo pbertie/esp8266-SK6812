@@ -5,9 +5,8 @@
 #ifndef LEDSTRIP_LOGGING_H
 #define LEDSTRIP_LOGGING_H
 
-#define DEBUG_OUTPUT true
-
 #include <Arduino.h>
+#include "config.h"
 
 namespace ZLogging {
 

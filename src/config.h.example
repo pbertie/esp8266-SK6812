@@ -5,6 +5,8 @@
 #ifndef ESPSTRIP_CONFIG_H
 #define ESPSTRIP_CONFIG_H
 
+#define DEBUG_OUTPUT true
+
 #define SSID_AP "ESP_AP"
 #define WIFI_PASS_AP "password"
 #define SSID_1 "SSID1"
@@ -21,5 +23,9 @@
 #define BTN_2 0
 #define BTN_3 14
 #define STRIP_POWER 16
+
+#define START_WHITE_COUNT 5
+#define START_COLOR_COUNT 3
+#define START_SPEED 30
 
 #endif //ESPSTRIP_CONFIG_H

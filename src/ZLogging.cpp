@@ -26,8 +26,8 @@ namespace ZLogging {
         Serial.println(str);
     }
 #else
-    void setupLogger(unsigned long baud) {}
+    void beginLogger(unsigned long baud) {}
     void log(const char *str) {}
-    void log(String str) {}
+    void log(const String& str) {}
 #endif
 }
