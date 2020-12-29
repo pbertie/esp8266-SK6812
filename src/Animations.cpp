@@ -99,8 +99,10 @@ namespace Animations {
 
     void remove(uint16_t id) {
         RunningSpotData *data = getData(id);
-        Zinc::removeAnimateEvent(data->animId);
-        removeData(id);
+        if (data != nullptr) {
+            Zinc::removeAnimateEvent(data->animId);
+            removeData(id);
+        }
     }
 
     void pause(uint16_t id) {
