@@ -5,6 +5,7 @@
 #ifndef LEDSTRIP_ZINC_H
 #define LEDSTRIP_ZINC_H
 
+#include <cstdint>
 #include "ZButtons.h"
 #include "ZTimer.h"
 #include "ZNetwork.h"

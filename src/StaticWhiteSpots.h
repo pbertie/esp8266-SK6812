@@ -5,14 +5,9 @@
 #ifndef ESPSTRIP_STATICWHITESPOTS_H
 #define ESPSTRIP_STATICWHITESPOTS_H
 
-#include "config.h"
-#include "Zinc.h"
-#include "SpotLeds.h"
-#include "main.h"
-
 namespace StaticWhiteSpots {
 
-    void draw(Adafruit_NeoPixel &strip);
+    void draw();
 
 }
 
