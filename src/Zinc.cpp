@@ -8,7 +8,7 @@ namespace Zinc {
 
     void process() {
         ZButtons::process();
-        ZAnimate::process();
+        ZTimer::process();
     }
 
     uint16_t addButtonEvent(uint8_t pin, void (*cb)(), uint8_t trigger, uint16_t throttle, uint16_t debounce) {
@@ -38,21 +38,21 @@ namespace Zinc {
      * @return
      */
     uint16_t
-    addAnimateEvent(ZAnimate::frameCallback cb, uint32_t frameLength, uint16_t frameCount, unsigned long initDelay,
-                    ZAnimate::frameCallback cb_start, ZAnimate::frameCallback cb_end) {
-        return ZAnimate::add(cb, frameLength, frameCount, initDelay, cb_start, cb_end);
+    addTimerEvent(ZTimer::frameCallback cb, uint32_t frameLength, uint16_t frameCount, unsigned long initDelay,
+                  ZTimer::frameCallback cb_start, ZTimer::frameCallback cb_end) {
+        return ZTimer::add(cb, frameLength, frameCount, initDelay, cb_start, cb_end);
     }
 
-    void removeAnimateEvent(uint16_t id) {
-        ZAnimate::remove(id);
+    void removeTimerEvent(uint16_t id) {
+        ZTimer::remove(id);
     }
 
-    void pauseAnimateEvent(uint16_t id) {
-        ZAnimate::setActive(id, false);
+    void pauseTimerEvent(uint16_t id) {
+        ZTimer::setActive(id, false);
     }
 
-    void resumeAnimateEvent(uint16_t id) {
-        ZAnimate::setActive(id, true);
+    void resumeTimerEvent(uint16_t id) {
+        ZTimer::setActive(id, true);
     }
 
     void beginNetwork(ZNetwork::NetworkCredentials ap) {

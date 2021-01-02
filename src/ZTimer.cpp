@@ -2,14 +2,14 @@
 // Created by paul on 20/11/2020.
 //
 
-#include "ZAnimate.h"
+#include "ZTimer.h"
 
-namespace ZAnimate {
-    class AnimateEventDef {
+namespace ZTimer {
+    class TimerEventDef {
     public:
-        AnimateEventDef(uint16_t id, unsigned long nextTrigger, uint16_t frame, uint32_t frameLength,
-                        uint16_t frameCount, bool skipMissedFrames, frameCallback cb, frameCallback cbStart,
-                        frameCallback cbEnd);
+        TimerEventDef(uint16_t id, unsigned long nextTrigger, uint16_t frame, uint32_t frameLength,
+                      uint16_t frameCount, bool skipMissedFrames, frameCallback cb, frameCallback cbStart,
+                      frameCallback cbEnd);
 
         uint16_t id;
         unsigned long nextTrigger;
@@ -27,14 +27,14 @@ namespace ZAnimate {
         frameCallback cb_end;
     };
 
-    AnimateEventDef::AnimateEventDef(uint16_t id, unsigned long nextTrigger, uint16_t frame, uint32_t frameLength,
-                                     uint16_t frameCount, bool skipMissedFrames, frameCallback cb,
-                                     frameCallback cbStart, frameCallback cbEnd)
+    TimerEventDef::TimerEventDef(uint16_t id, unsigned long nextTrigger, uint16_t frame, uint32_t frameLength,
+                                 uint16_t frameCount, bool skipMissedFrames, frameCallback cb,
+                                 frameCallback cbStart, frameCallback cbEnd)
             : id(id), nextTrigger(nextTrigger), pauseDelay(0), frame(frame), frameLength(frameLength),
               frameCount(frameCount), skipMissedFrames(skipMissedFrames), active(true), cb(cb), cb_start(cbStart),
               cb_end(cbEnd) {}
 
-    LinkedList<AnimateEventDef *> eventList;
+    LinkedList<TimerEventDef *> eventList;
     uint16_t nextId = 1;
 
     void process() {
@@ -42,7 +42,7 @@ namespace ZAnimate {
 
         uint16_t listSize = eventList.size();
         for (uint16_t i = 0; i < listSize; i++) {
-            AnimateEventDef *e = eventList.get(i);
+            TimerEventDef *e = eventList.get(i);
             if (e->active && e->frame < e->frameCount) {
                 now = millis();
 
@@ -73,7 +73,7 @@ namespace ZAnimate {
         if (listSize > 0) {
             // i is 1 higher that index to avoid overflows on unsigned...
             for (uint16_t i = listSize; i > 0; i--) {
-                AnimateEventDef *e = eventList.get(i - 1);
+                TimerEventDef *e = eventList.get(i - 1);
                 if (e->frame >= e->frameCount) {
                     eventList.remove(i - 1);
                 }
@@ -85,8 +85,8 @@ namespace ZAnimate {
     add(frameCallback cb, uint32_t frameLength, uint16_t frameCount, unsigned long initDelay, frameCallback cb_start,
         frameCallback cb_end, bool skipMissedFrames) {
         unsigned long now = millis();
-        auto *e = new AnimateEventDef(nextId, now + initDelay, 0, frameLength, frameCount, skipMissedFrames, cb,
-                                      cb_start, cb_end);
+        auto *e = new TimerEventDef(nextId, now + initDelay, 0, frameLength, frameCount, skipMissedFrames, cb,
+                                    cb_start, cb_end);
         eventList.add(e);
         return nextId++;
     }
@@ -95,7 +95,7 @@ namespace ZAnimate {
         uint16_t listSize = eventList.size();
         // i is 1 higher that index to avoid overflows on unsigned...
         for (uint16_t i = listSize; i > 0; i--) {
-            AnimateEventDef *e = eventList.get(i - 1);
+            TimerEventDef *e = eventList.get(i - 1);
             if (e->id == id) {
                 delete e;
                 eventList.remove(i - 1);
@@ -107,7 +107,7 @@ namespace ZAnimate {
     void setActive(uint16_t id, bool active) {
         uint16_t listSize = eventList.size();
         for (uint16_t i = 0; i < listSize; i++) {
-            AnimateEventDef *e = eventList.get(i);
+            TimerEventDef *e = eventList.get(i);
             if (e->id == id) {
                 e->active = active;
                 unsigned long now = millis();

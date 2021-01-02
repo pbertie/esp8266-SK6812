@@ -6,13 +6,13 @@
 #include "Zinc.h"
 #include "config.h"
 
-uint16_t aIdRGB = 0;
-uint16_t aIdBuiltIn = 0;
+uint16_t tIdRGB = 0;
+uint16_t tIdBuiltIn = 0;
 
 uint16_t flashBuiltIn(uint32_t duration, uint16_t count, unsigned long initDelay) {
     // Remove any existing animation...
-    if (aIdBuiltIn != 0) {
-        Zinc::removeAnimateEvent(aIdBuiltIn);
+    if (tIdBuiltIn != 0) {
+        Zinc::removeTimerEvent(tIdBuiltIn);
     }
     // Turn off leds...
     digitalWrite(LED_BUILTIN, HIGH);
@@ -23,13 +23,13 @@ uint16_t flashBuiltIn(uint32_t duration, uint16_t count, unsigned long initDelay
     }
     uint16_t frameCount = count * 2;
     uint32_t frameLength = duration / frameCount;
-    aIdBuiltIn = Zinc::addAnimateEvent(
+    tIdBuiltIn = Zinc::addTimerEvent(
             [](uint16_t id, uint16_t frame) -> void { digitalWrite(LED_BUILTIN, frame % 2 == 0 ? HIGH : LOW); },
             frameLength, frameCount, initDelay, nullptr, [](uint16_t id, uint16_t frame) -> void {
                 digitalWrite(LED_BUILTIN, frame % 2 == 0 ? HIGH : LOW);
-                aIdBuiltIn = 0;
+                tIdBuiltIn = 0;
             });
-    return aIdBuiltIn;
+    return tIdBuiltIn;
 }
 
 uint16_t flashR(uint32_t duration, uint16_t count, unsigned long initDelay) {
@@ -72,8 +72,8 @@ void flashRGBFrame(uint16_t id, uint16_t frame) {
 
 uint16_t flashRGB(uint8_t r, uint8_t g, uint8_t b, uint32_t duration, uint16_t count, unsigned long initDelay) {
     // Remove any existing animation...
-    if (aIdRGB != 0) {
-        Zinc::removeAnimateEvent(aIdRGB);
+    if (tIdRGB != 0) {
+        Zinc::removeTimerEvent(tIdRGB);
     }
     // Turn off leds...
     digitalWrite(LED_R, LOW);
@@ -93,9 +93,10 @@ uint16_t flashRGB(uint8_t r, uint8_t g, uint8_t b, uint32_t duration, uint16_t c
     uint16_t frameCount = count * 2;
     uint32_t frameLength = duration / (frameCount - 1);
 
-    aIdRGB = Zinc::addAnimateEvent(flashRGBFrame, frameLength, frameCount, initDelay, nullptr, [](uint16_t id, uint16_t frame) -> void {
-        flashRGBFrame(id, frame);
-        aIdRGB = 0;
-    });
-    return aIdRGB;
+    tIdRGB = Zinc::addTimerEvent(flashRGBFrame, frameLength, frameCount, initDelay, nullptr,
+                                 [](uint16_t id, uint16_t frame) -> void {
+                                     flashRGBFrame(id, frame);
+                                     tIdRGB = 0;
+                                 });
+    return tIdRGB;
 }

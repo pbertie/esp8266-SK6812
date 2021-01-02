@@ -9,7 +9,7 @@
 #include <LinkedList.h>
 #include "ZLogging.h"
 
-namespace ZAnimate {
+namespace ZTimer {
 
     typedef void (*frameCallback)(uint16_t id, uint16_t frame);
 

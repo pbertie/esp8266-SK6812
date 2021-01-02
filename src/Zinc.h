@@ -6,7 +6,7 @@
 #define LEDSTRIP_ZINC_H
 
 #include "ZButtons.h"
-#include "ZAnimate.h"
+#include "ZTimer.h"
 #include "ZNetwork.h"
 #include "ZLogging.h"
 
@@ -23,15 +23,15 @@ namespace Zinc {
 
     void resumeButtonEvent(uint16_t id);
 
-    uint16_t addAnimateEvent(ZAnimate::frameCallback cb, uint32_t frameLength, uint16_t frameCount = 1,
-                             unsigned long initDelay = 0, ZAnimate::frameCallback cb_start = nullptr,
-                             ZAnimate::frameCallback cb_end = nullptr);
+    uint16_t addTimerEvent(ZTimer::frameCallback cb, uint32_t frameLength, uint16_t frameCount = 1,
+                           unsigned long initDelay = 0, ZTimer::frameCallback cb_start = nullptr,
+                           ZTimer::frameCallback cb_end = nullptr);
 
-    void removeAnimateEvent(uint16_t id);
+    void removeTimerEvent(uint16_t id);
 
-    void pauseAnimateEvent(uint16_t id);
+    void pauseTimerEvent(uint16_t id);
 
-    void resumeAnimateEvent(uint16_t id);
+    void resumeTimerEvent(uint16_t id);
 
     void beginNetwork(ZNetwork::NetworkCredentials ap = {"ZINC-SETUP", nullptr});
 

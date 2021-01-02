@@ -10,7 +10,7 @@
 #include "Zinc.h"
 #include "Animations.h"
 #include "statusLeds.h"
-//#include "staticWhiteSpots.h"
+#include "staticWhiteSpots.h"
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, LED_STRIP_PIN, NEO_GRBW + NEO_KHZ800);
 
@@ -29,13 +29,9 @@ void resetAnimation();
 
 void initGPIO();
 
-void drawInitPattern();
-
-void show(uint32_t frameLength, uint16_t frameCount, unsigned long initDelay = 0);
-
 uint16_t animationId = 0;
-uint16_t aIdWarmUp = 0;
-uint16_t aIdShow = 0;
+uint16_t tIdWarmUp = 0;
+uint16_t tIdShow = 0;
 uint8_t colorCount = START_COLOR_COUNT;
 uint8_t whiteCount = START_WHITE_COUNT;
 uint32_t gap = START_SPEED;
@@ -61,6 +57,7 @@ void setup() {
 }
 
 void initGPIO() {
+    // Define Ouputs...
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_R, OUTPUT);
     pinMode(LED_G, OUTPUT);
@@ -71,6 +68,7 @@ void initGPIO() {
     digitalWrite(LED_B, LOW); // OFF
     digitalWrite(LED_BUILTIN, HIGH); // OFF
 
+    // Define Inputs...
     pinMode(BTN_1, INPUT_PULLUP);
     pinMode(BTN_2, INPUT_PULLUP);
     pinMode(BTN_3, INPUT_PULLUP);
@@ -128,9 +126,9 @@ void displayMenu() {
 }
 
 void changeMode(uint8_t newMode) {
-    if (aIdWarmUp != 0) {
-        Zinc::removeAnimateEvent(aIdWarmUp);
-        aIdWarmUp = 0;
+    if (tIdWarmUp != 0) {
+        Zinc::removeTimerEvent(tIdWarmUp);
+        tIdWarmUp = 0;
     }
     if (animationId != 0) {
         Animations::remove(animationId);
@@ -145,8 +143,7 @@ void changeMode(uint8_t newMode) {
             break;
         case 1:
             // Green - Show Static White Spots
-            drawInitPattern();
-            strip.show();
+            StaticWhiteSpots::draw(strip);
             flashRGB(0, 255, 0, 400, 3);
             break;
         case 2:
@@ -278,15 +275,6 @@ void DownBtn() {
     }
 }
 
-void drawInitPattern() {
-    uint16_t pos = 9;
-    while (pos < LED_COUNT - 4) {
-        drawSpot_11(strip, pos, 0, 1, 255, true);
-        drawSpot_11(strip, pos, 0, 0, 255, true);
-        pos += 44;
-    }
-}
-
 void initStrip() {
     strip.begin();
     strip.setBrightness(255);
@@ -302,24 +290,29 @@ void initStrip() {
 //    strip.fill(Adafruit_NeoPixel::Color(0,0,120,255));    // 3.7A  >5.0A
 //    strip.fill(Adafruit_NeoPixel::Color(0,0,255,255));    // 4.1A  >5.0A
 //    strip.fill(Adafruit_NeoPixel::Color(150,0,255,255));  // 4.4A  >5.0A
-
-    aIdWarmUp = Zinc::addAnimateEvent([](uint16_t id, uint16_t frame) -> void {
-        drawInitPattern();
-        show(50, 10);
-    }, 0, 1, 120000);
-
     strip.show(); // Initialize all pixels
+
+    tIdWarmUp = Zinc::addTimerEvent([](uint16_t id, uint16_t frame) -> void {
+        StaticWhiteSpots::draw(strip);
+    }, 0, 1, 180); // 000
+
+}
+
+void stopShow() {
+    if (tIdShow != 0) {
+        Zinc::removeTimerEvent(tIdShow);
+        tIdShow = 0;
+    }
 }
 
 void show(uint32_t frameLength, uint16_t frameCount, unsigned long initDelay) {
-    if (aIdShow != 0) {
-        Zinc::removeAnimateEvent(aIdShow);
-    }
-    aIdShow = Zinc::addAnimateEvent([](uint16_t id, uint16_t frame) -> void { strip.show(); }, frameLength, frameCount, initDelay, nullptr,
-                                    [](uint16_t id, uint16_t frame) -> void {
-                                        strip.show();
-                                        aIdShow = 0;
-                                    });
+    stopShow();
+    tIdShow = Zinc::addTimerEvent([](uint16_t id, uint16_t frame) -> void { strip.show(); }, frameLength, frameCount,
+                                  initDelay, nullptr,
+                                  [](uint16_t id, uint16_t frame) -> void {
+                                      strip.show();
+                                      tIdShow = 0;
+                                  });
 }
 
 void stripOff() {
@@ -353,10 +346,7 @@ void resetAnimation() {
     if (animationId != 0) {
         Animations::remove(animationId);
     }
-    if (aIdShow != 0) {
-        Zinc::removeAnimateEvent(aIdShow);
-        aIdShow = 0;
-    }
+    stopShow();
     strip.fill(Adafruit_NeoPixel::Color(0, 0, 0, 0));
     animationId = Animations::runningSpots(strip, colorCount, whiteCount, true, gap);
 }
