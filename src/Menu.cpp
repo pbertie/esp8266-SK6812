@@ -11,10 +11,13 @@
 #include "main.h"
 #include "Strip.h"
 
+#define MENU_OFF 0
+#define MENU_STATIC_WHITE 1
+#define MENU_RUNNING_SPOTS 2
+
 namespace Menu {
 
-#define MENU_DURATION 10000
-    uint8_t mode = 0;
+    uint8_t mode = MENU_STATIC_WHITE;
     uint8_t menu = 0;
 
     uint32_t menuTimeout = 0;
@@ -76,18 +79,18 @@ namespace Menu {
         cancelWarmUp();
         RunningSpots::stop();
         switch (newMode) {
-            case 0:
+            case MENU_OFF:
                 // Red - Off
                 Strip::clear();
                 Strip::show();
                 flashRGB(255, 0, 0, 400, 3);
                 break;
-            case 1:
+            case MENU_STATIC_WHITE:
                 // Green - Show Static White Spots
                 StaticWhiteSpots::draw();
                 flashRGB(0, 255, 0, 400, 3);
                 break;
-            case 2:
+            case MENU_RUNNING_SPOTS:
                 // Blue - Show Animated Spots
                 RunningSpots::resume();
                 flashRGB(0, 0, 255, 400, 3);
@@ -109,9 +112,9 @@ namespace Menu {
         if (millis() < menuTimeout) {
             // Do Action...
             switch (menu) {
-                case 0:
-                case 1:
-                case 2:
+                case MENU_OFF:
+                case MENU_STATIC_WHITE:
+                case MENU_RUNNING_SPOTS:
                     changeMode(menu);
                     break;
                 case 3:
@@ -132,20 +135,35 @@ namespace Menu {
         if (millis() < menuTimeout) {
             if (menuSelected) {
                 switch (menu) {
-                    case 3: // Speed
-                        RunningSpots::speedUp();
+                    case 3: // Speed/Spacing
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::speedUp();
+                        } else if (mode == MENU_STATIC_WHITE) {
+                            StaticWhiteSpots::spacingUp();
+                        }
                         break;
                     case 4: // Colour Count
-                        RunningSpots::colourCountUp();
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::colourCountUp();
+                        }
                         break;
                     case 5: // White Count
-                        RunningSpots::whiteCountUp();
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::whiteCountUp();
+                        }
                         break;
                     default:
                         return;
                 }
             } else {
-                if (menu == 5) {
+                uint8_t maxOption = 2;
+                if (mode == MENU_STATIC_WHITE) {
+                    maxOption = 3;
+                } else if(mode == MENU_RUNNING_SPOTS) {
+                    maxOption = 5;
+                }
+
+                if (menu >= maxOption) {
                     menu = 0;
                 } else {
                     menu++;
@@ -161,21 +179,35 @@ namespace Menu {
         if (millis() < menuTimeout) {
             if (menuSelected) {
                 switch (menu) {
-                    case 3: // Speed
-                        RunningSpots::speedDown();
+                    case 3: // Speed/Spacing
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::speedDown();
+                        } else if (mode == MENU_STATIC_WHITE) {
+                            StaticWhiteSpots::spacingDown();
+                        }
                         break;
                     case 4: // Colour Count
-                        RunningSpots::colourCountDown();
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::colourCountDown();
+                        }
                         break;
                     case 5: // White Count
-                        RunningSpots::whiteCountDown();
+                        if (mode == MENU_RUNNING_SPOTS) {
+                            RunningSpots::whiteCountDown();
+                        }
                         break;
                     default:
                         return;
                 }
             } else {
                 if (menu == 0) {
-                    menu = 5;
+                    if (mode == MENU_STATIC_WHITE) {
+                        menu = 3;
+                    } else if (mode == MENU_RUNNING_SPOTS) {
+                        menu = 5;
+                    } else {
+                        menu = 2;
+                    }
                 } else {
                     menu--;
                 }

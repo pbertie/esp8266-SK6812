@@ -28,4 +28,6 @@
 #define START_COLOR_COUNT 3
 #define START_SPEED 30
 
+#define MENU_DURATION 10000
+
 #endif //ESPSTRIP_CONFIG_H

@@ -9,6 +9,9 @@ namespace StaticWhiteSpots {
 
     void draw();
 
+    void spacingUp();
+
+    void spacingDown();
 }
 
 #endif //ESPSTRIP_STATICWHITESPOTS_H

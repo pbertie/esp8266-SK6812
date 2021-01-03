@@ -9,7 +9,7 @@ Pressing any button will open the menu, this is shown by the on board RGB LED li
 - **Red**: Turn Strip Off.
 - **Green**: Change Strip to Static White Spots mode.
 - **Blue**: Change Strip to Animated Spots (Coloured and White going in opposite directions).
-- **Yellow**: Change Animation Speed Mode. Will flash yellow and changes Up & Down buttons to control the speed. *Press Select again to exit.*
+- **Yellow**: Change Animation Speed Mode or Change White Gap. Will flash yellow and changes Up & Down buttons to control the speed or Gap between  White spots depending on the current mode. *Press Select again to exit.*
 - **Teal**: Change Animation Colour Count. Will flash teal and changes Up & Down buttons to control the number of coloured spots. *Press Select again to exit.*
 - **Purple**: Change Animation White Count. Will flash purple and changes Up & Down buttons to control the number of white spots. *Press Select again to exit.*
 
