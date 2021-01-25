@@ -11,10 +11,6 @@
 #include "main.h"
 #include "Strip.h"
 
-#define MENU_OFF 0
-#define MENU_STATIC_WHITE 1
-#define MENU_RUNNING_SPOTS 2
-
 namespace Menu {
 
     uint8_t mode = MENU_STATIC_WHITE;
@@ -216,6 +212,10 @@ namespace Menu {
         } else {
             initMenu();
         }
+    }
+
+    uint8_t getMode() {
+        return mode;
     }
 
 }

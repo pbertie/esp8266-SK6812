@@ -6,6 +6,7 @@
 #include "config.h"
 #include "Zinc.h"
 #include "statusLeds.h"
+#include <Adafruit_NeoPixel.h>
 
 namespace Strip {
 
@@ -82,7 +83,11 @@ namespace Strip {
         return strip.numPixels();
     }
 
-    Adafruit_NeoPixel* getStrip() {
-        return &strip;
+    void setPixelColor(uint16_t n, uint32_t c) {
+        strip.setPixelColor(n, c);
+    }
+
+    uint32_t getPixelColor(uint16_t n) {
+        return strip.getPixelColor(n);
     }
 }

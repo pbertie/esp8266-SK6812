@@ -34,7 +34,7 @@ namespace Zinc {
 
     void resumeTimerEvent(uint16_t id);
 
-    void beginNetwork(ZNetwork::NetworkCredentials ap = {"ZINC-SETUP", nullptr});
+    void beginNetwork(ZNetwork::NetworkCredentials ap = {"ZINC-SETUP", nullptr}, const char* hostname = "zinc-enabled");
 
     void addNetwork(ZNetwork::NetworkCredentials network);
 

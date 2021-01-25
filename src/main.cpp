@@ -10,6 +10,7 @@
 #include "StaticWhiteSpots.h"
 #include "Menu.h"
 #include "Strip.h"
+#include "WebControl.h"
 
 void initGPIO();
 
@@ -24,7 +25,8 @@ void setup() {
     }, 0, 1, 180000);
     Zinc::addNetwork({SSID_1, WIFI_PASS_1});
     Zinc::addNetwork({SSID_2, WIFI_PASS_2});
-    Zinc::beginNetwork({SSID_AP, WIFI_PASS_AP});
+    Zinc::beginNetwork({SSID_AP, WIFI_PASS_AP}, MDNS_HOSTNAME);
+    WebControl::setup();
     Zinc::log("Starting Loop");
 }
 
@@ -33,7 +35,7 @@ void loop() {
 }
 
 void initGPIO() {
-    // Define Ouputs...
+    // Define Outputs...
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(LED_R, OUTPUT);
     pinMode(LED_G, OUTPUT);

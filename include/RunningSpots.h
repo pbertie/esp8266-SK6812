@@ -25,6 +25,9 @@ namespace RunningSpots {
 
     void colourCountUp();
     void colourCountDown();
+
+    uint8_t getColorCount();
+    uint8_t getWhiteCount();
 }
 
 #endif //ESPSTRIP_RUNNINGSPOTS_H

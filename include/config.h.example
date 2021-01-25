@@ -5,7 +5,7 @@
 #ifndef ESPSTRIP_CONFIG_H
 #define ESPSTRIP_CONFIG_H
 
-#define DEBUG_OUTPUT true
+#define Z_DEBUG_OUTPUT true
 
 #define SSID_AP "ESP_AP"
 #define WIFI_PASS_AP "password"
@@ -13,6 +13,9 @@
 #define SSID_2 "SSID2"
 #define WIFI_PASS_1 "pass1"
 #define WIFI_PASS_2 "pass2"
+
+#define MDNS_HOSTNAME "esp-ledstrip"
+#define WIFI_ADD_VCODE "1234"
 
 #define LED_STRIP_PIN 5
 #define LED_R 15

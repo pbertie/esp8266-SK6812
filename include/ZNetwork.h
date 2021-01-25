@@ -5,10 +5,6 @@
 #ifndef ESPSTRIP_ZNETWORK_H
 #define ESPSTRIP_ZNETWORK_H
 
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
-#include "config.h"
-
 namespace ZNetwork {
 
     struct NetworkCredentials {
@@ -16,8 +12,10 @@ namespace ZNetwork {
         const char* pass;
     };
 
-    void beginNetwork(NetworkCredentials ap = {"ZINC-SETUP", nullptr});
+    void beginNetwork(NetworkCredentials ap, const char* hostname);
     void addNetwork(NetworkCredentials network);
+
+    void process();
 }
 
 #endif //ESPSTRIP_ZNETWORK_H

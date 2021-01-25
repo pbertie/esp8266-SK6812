@@ -9,6 +9,8 @@ namespace Zinc {
     void process() {
         ZButtons::process();
         ZTimer::process();
+        ZWebServer::handleClient();
+        ZNetwork::process();
     }
 
     uint16_t addButtonEvent(uint8_t pin, void (*cb)(), uint8_t trigger, uint16_t throttle, uint16_t debounce) {
@@ -55,8 +57,8 @@ namespace Zinc {
         ZTimer::setActive(id, true);
     }
 
-    void beginNetwork(ZNetwork::NetworkCredentials ap) {
-        ZNetwork::beginNetwork(ap);
+    void beginNetwork(ZNetwork::NetworkCredentials ap, const char* hostname) {
+        ZNetwork::beginNetwork(ap, hostname);
     }
 
     void addNetwork(ZNetwork::NetworkCredentials network) {

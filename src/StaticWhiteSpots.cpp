@@ -6,6 +6,7 @@
 #include "config.h"
 #include "SpotLeds.h"
 #include "Strip.h"
+#include <cmath>
 
 namespace StaticWhiteSpots {
 
@@ -17,8 +18,8 @@ namespace StaticWhiteSpots {
         uint16_t pos = 4 + floor(endSpacing / 2);
         Strip::clear();
         while (pos < LED_COUNT - 3) {
-            drawSpot_9(Strip::getStrip(), pos, 0, 1, 255, true);
-            drawSpot_9(Strip::getStrip(), pos, 0, 0, 255, true);
+            drawSpot_9(pos, 0, 1, 255, true);
+            drawSpot_9(pos, 0, 0, 255, true);
             pos += spacing;
         }
         // Resend the signal every minute for 2 hours. This shouldn't be needed but I
@@ -38,5 +39,9 @@ namespace StaticWhiteSpots {
             spacing--;
             draw();
         }
+    }
+
+    uint16_t getSpacing() {
+        return spacing;
     }
 }

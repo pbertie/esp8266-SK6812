@@ -6,7 +6,6 @@
 #define ESPSTRIP_STRIP_H
 
 #include <cstdint>
-#include <Adafruit_NeoPixel.h>
 
 namespace Strip {
 
@@ -26,7 +25,9 @@ namespace Strip {
 
     uint16_t numPixels();
 
-    Adafruit_NeoPixel* getStrip();
+    void setPixelColor(uint16_t n, uint32_t c);
+
+    uint32_t getPixelColor(uint16_t n);
 }
 
 #endif //ESPSTRIP_STRIP_H

@@ -91,13 +91,13 @@ namespace RunningSpots {
                     hue = 65535 * 0.66;
             }
             uint16_t pos = ((i * colorSpacing) + frame) % ledCount;
-            drawSpot_7(Strip::getStrip(), pos, hue, 255, 255, _looped);
+            drawSpot_7(pos, hue, 255, 255, _looped);
         }
 
         for (i = 0; i < _whiteCount; i++) {
 
             uint16_t pos = (ledCount + ( i * whiteSpacing) - (frame % ledCount)) % ledCount;
-            drawSpot_11(Strip::getStrip(), pos, 0, 0, 200, _looped);
+            drawSpot_11(pos, 0, 0, 200, _looped);
         }
         Strip::show();
     }
@@ -146,4 +146,11 @@ namespace RunningSpots {
         }
     }
 
+    uint8_t getColorCount() {
+        return _colorCount;
+    }
+
+    uint8_t getWhiteCount() {
+        return _whiteCount;
+    }
 }

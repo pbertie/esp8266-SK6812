@@ -6,7 +6,7 @@
 
 namespace ZLogging {
 
-#if DEBUG_OUTPUT == true
+#if Z_DEBUG_OUTPUT == true
 
     void beginLogger(unsigned long baud) {
         Serial.begin(baud);
