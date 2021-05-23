@@ -10,6 +10,7 @@
 #define MENU_OFF 0
 #define MENU_STATIC_WHITE 1
 #define MENU_RUNNING_SPOTS 2
+#define MENU_DOOR_BEAM 3
 
 
 namespace Menu {

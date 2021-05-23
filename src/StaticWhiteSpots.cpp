@@ -10,7 +10,7 @@
 
 namespace StaticWhiteSpots {
 
-    uint16_t spacing = 44;
+    uint16_t spacing = 46;
 
     void draw() {
         double endSpacing = (LED_COUNT - 9) % (spacing);

@@ -10,6 +10,7 @@
 #include "ZTimer.h"
 #include "ZNetwork.h"
 #include "ZLogging.h"
+#include "ZWebServer.h"
 
 namespace Zinc {
 

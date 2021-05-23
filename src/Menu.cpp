@@ -4,6 +4,7 @@
 
 #include "Menu.h"
 #include "StaticWhiteSpots.h"
+#include "DoorBeam.h"
 #include "RunningSpots.h"
 #include "config.h"
 #include "Zinc.h"
@@ -91,6 +92,11 @@ namespace Menu {
                 RunningSpots::resume();
                 flashRGB(0, 0, 255, 400, 3);
                 break;
+            case MENU_DOOR_BEAM:
+                // ??? - Show Door Beam
+                DoorBeam::draw();
+                flashRGB(0, 50, 205, 400, 3);
+                break;
             default:
                 return;
         }
@@ -111,11 +117,12 @@ namespace Menu {
                 case MENU_OFF:
                 case MENU_STATIC_WHITE:
                 case MENU_RUNNING_SPOTS:
+                case MENU_DOOR_BEAM:
                     changeMode(menu);
                     break;
-                case 3:
                 case 4:
                 case 5:
+                case 6:
                     menuSelected = !menuSelected;
                     displayMenu();
                     break;
@@ -131,19 +138,19 @@ namespace Menu {
         if (millis() < menuTimeout) {
             if (menuSelected) {
                 switch (menu) {
-                    case 3: // Speed/Spacing
+                    case 5: // Speed/Spacing
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::speedUp();
                         } else if (mode == MENU_STATIC_WHITE) {
                             StaticWhiteSpots::spacingUp();
                         }
                         break;
-                    case 4: // Colour Count
+                    case 6: // Colour Count
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::colourCountUp();
                         }
                         break;
-                    case 5: // White Count
+                    case 7: // White Count
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::whiteCountUp();
                         }
@@ -154,6 +161,8 @@ namespace Menu {
             } else {
                 uint8_t maxOption = 2;
                 if (mode == MENU_STATIC_WHITE) {
+                    maxOption = 3;
+                } else if (mode == MENU_DOOR_BEAM) {
                     maxOption = 3;
                 } else if(mode == MENU_RUNNING_SPOTS) {
                     maxOption = 5;
@@ -175,19 +184,19 @@ namespace Menu {
         if (millis() < menuTimeout) {
             if (menuSelected) {
                 switch (menu) {
-                    case 3: // Speed/Spacing
+                    case 4: // Speed/Spacing
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::speedDown();
                         } else if (mode == MENU_STATIC_WHITE) {
                             StaticWhiteSpots::spacingDown();
                         }
                         break;
-                    case 4: // Colour Count
+                    case 5: // Colour Count
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::colourCountDown();
                         }
                         break;
-                    case 5: // White Count
+                    case 6: // White Count
                         if (mode == MENU_RUNNING_SPOTS) {
                             RunningSpots::whiteCountDown();
                         }
@@ -198,6 +207,8 @@ namespace Menu {
             } else {
                 if (menu == 0) {
                     if (mode == MENU_STATIC_WHITE) {
+                        menu = 3;
+                    } else if (mode == MENU_DOOR_BEAM) {
                         menu = 3;
                     } else if (mode == MENU_RUNNING_SPOTS) {
                         menu = 5;
