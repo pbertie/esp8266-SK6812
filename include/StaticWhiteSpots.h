@@ -7,6 +7,9 @@
 
 #include <cstdint>
 
+#define STYLE_WHITE 0x1
+#define STYLE_RGB 0x2
+
 namespace StaticWhiteSpots {
 
     void draw();
@@ -16,6 +19,10 @@ namespace StaticWhiteSpots {
     void spacingDown();
 
     uint16_t getSpacing();
+
+    uint8_t getStyle();
+
+    void setStyle(uint8_t newStyle);
 }
 
 #endif //ESPSTRIP_STATICWHITESPOTS_H

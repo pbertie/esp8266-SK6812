@@ -19,6 +19,11 @@ namespace WebControl {
     const char *pageSpacingStart = R"(<h1>Spacing</h1><button onclick="window.location='/staticWhite/spacingUp'">Up</button></br>)";
     const char *pageSpacingEnd = R"(</br><button onclick="window.location='/staticWhite/spacingDown'">Down</button>)";
 
+    const char *pageStyleStart = R"(<h1>Style</h1>)";
+    const char *pageStyleWhite = R"(<button onclick="window.location='/staticWhite/style/white'">White</button></br></br>)";
+    const char *pageStyleRGB = R"(<button onclick="window.location='/staticWhite/style/rgb'">RGB</button></br></br>)";
+    const char *pageStyleBoth = R"(<button onclick="window.location='/staticWhite/style/both'">Both</button></br></br>)";
+
     const char *pageDoorBeamSpacingStart = R"(<h1>Spacing</h1><button onclick="window.location='/doorBeam/spacingUp'">Up</button></br>)";
     const char *pageDoorBeamSpacingEnd = R"(</br><button onclick="window.location='/doorBeam/spacingDown'">Down</button>)";
     const char *pageDoorBeamSizeStart = R"(<h1>Size</h1><button onclick="window.location='/doorBeam/sizeUp'">Up</button></br>)";
@@ -91,6 +96,21 @@ namespace WebControl {
             redirect();
         });
 
+        ZWebServer::on("/staticWhite/style/white", HTTP_GET, []() {
+            StaticWhiteSpots::setStyle(STYLE_WHITE);
+            redirect();
+        });
+
+        ZWebServer::on("/staticWhite/style/rgb", HTTP_GET, []() {
+            StaticWhiteSpots::setStyle(STYLE_RGB);
+            redirect();
+        });
+
+        ZWebServer::on("/staticWhite/style/both", HTTP_GET, []() {
+            StaticWhiteSpots::setStyle(STYLE_WHITE | STYLE_RGB);
+            redirect();
+        });
+
         ZWebServer::on("/runningSpots/whiteUp", HTTP_GET, []() {
             RunningSpots::whiteCountUp();
             redirect();
@@ -125,6 +145,10 @@ namespace WebControl {
             s.concat(pageSpacingStart);
             s.concat(StaticWhiteSpots::getSpacing());
             s.concat(pageSpacingEnd);
+            s.concat(pageStyleStart);
+            s.concat(pageStyleWhite);
+            s.concat(pageStyleRGB);
+            s.concat(pageStyleBoth);
         } else if (mode == MENU_RUNNING_SPOTS) {
             s.concat(pageColourCountStart);
             s.concat(RunningSpots::getColorCount());
